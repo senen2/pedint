@@ -30,8 +30,14 @@
 </body>
 <script type="text/javascript">
 	window.onload = function() {
+		var pag = '';
+		if (window.location.hostname=="pedi.myfinan.com")
+			pag = "es/cli.html";
+		else
+			pag = "es/index.html";
+
 		window.setTimeout(function() {
-			window.location = "es/index.html";
+			window.location = pag;
 		}, 10)
 	}
 </script>

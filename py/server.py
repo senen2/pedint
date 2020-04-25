@@ -35,7 +35,22 @@ def GetFunction(funcion):
 @route('/functiond/:funcion', method='POST')
 def PostFunction(funcion):
     datos = request.body
-    resp = PostServer(funcion, datos.buf)
+    if 'buf' in datos:
+        print("llega string")
+        resp = PostServer(funcion, datos.buf)
+    else:
+        print("llega file")
+        # print(request.keys())
+        # print("QUERY_STRING", request['bottle.request'])
+        # print()
+        # print("REQUEST_METHOD", request['bottle.request.body'])
+        # print()
+        # datos.save('/tmp/1.csv')
+        # print("files", request.files)
+        file = request['wsgi.input']
+        print('file', file)
+        print('pasa')
+        resp = PostServer(funcion, file)
 
     par = request.query.decode()
     if "pagina" in par:
@@ -49,6 +64,37 @@ def PostFunction(funcion):
         return request.POST.get('callback') + "(" + resp.decode('iso-8859-1')  + ")"
     else:
         return resp
+
+@route('/upload', method='POST')
+def upload():
+    id = request.forms.get('id')
+    tipo = request.forms.get('tipo')
+    upload = request.files.get('upload')
+    if upload:
+        name, ext = os.path.splitext(upload.filename)
+        ext = ext.lower()
+        f = str(id) + ext
+        file_path = PATH #'/home/carlosg/public_html/'
+    
+        with open(file_path + 'imgbig/' + f, 'wb') as open_file:
+            open_file.write(upload.file.read())
+
+@route('/upload', method='POST')
+def do_upload():
+    category = request.forms.get('category')
+    upload = request.files.get('upload')
+    name, ext = os.path.splitext(upload.filename)
+    if ext not in ('.png', '.jpg', '.jpeg'):
+        return "File extension not allowed."
+
+    save_path = "/tmp/{category}".format(category=category)
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
+    file_path = "{path}/{file}".format(path=save_path, file=upload.filename)
+    upload.save(file_path)
+    return "File successfully saved to '{0}'.".format(save_path)
+
 
 @route('/')
 @route('/hello/:name')
@@ -83,7 +129,7 @@ def stream():
     
 #from gevent import monkey; monkey.patch_all()
 # run(host='myfinan.com', port=8085, debug=True, server="cherrypy")
-run(host='142.93.52.198', port=8086, debug=True)
+run(host='142.93.52.198', port=8087, debug=True)
 
 # esto con class SSLWSGIRefServer para https
 # srv = SSLWSGIRefServer(host="192.168.1.112", port=8084)

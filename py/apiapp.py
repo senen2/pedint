@@ -8,8 +8,10 @@ from apiDB import DB
 from subapp import *
 from comun import *
 
+from csv import reader
+
 def Login(email, clave):
-    bd = DB(nombrebd="aprende")
+    bd = DB(nombrebd="pedi")
     usuario = login(email, clave, bd)
     if usuario:
         bd.cierra()
@@ -18,8 +20,42 @@ def Login(email, clave):
     bd.cierra()
     return None
 
+def CreaProductosP(email, clave, archivo):
+    df = pd.read_csv(archivo)
+    index = []
+
+    with open(archivo, 'r') as read_obj:
+        csv_reader = reader(read_obj)
+        header = next(csv_reader)
+        if header != None:
+            for row in csv_reader:
+                c = row.split(",")
+                bd.Ejecuta("""
+                    insert into % alias productos 
+                    (codigo, nombre, unidad, iva, precio, existencia)
+                    values ('%s', '%s', '%s', %s, %s, %s)")
+                """ % (c[index[0]], c[index[1]], c[index[2]], c[index[3]], c[index[4]], c[index[5]])        
+                )
+
+    bd.cierra()
+    return None
+
+def SubeArchivoP(email, clave, datos): #idtexto, texto):
+    print("llega")
+    bd = DB(nombrebd="pedi")
+    usuario = login(email, clave, bd)
+    if usuario:
+        texto = datos['texto']
+        idtexto = datos['idtexto']
+        rows = bd.Ejecuta("select * from textos where id=%s and idusuario=%s" % (idtexto, usuario['ID']))
+        if rows:
+            bd.Ejecuta("update textos set texto='%s' where id=%s" % (texto, idtexto))
+
+    bd.cierra()
+    return None
+
 def LeeTextoA(email, clave, IDtexto):
-    bd = DB(nombrebd="aprende")
+    bd = DB(nombrebd="pedi")
     usuario = login(email, clave, bd)
     if usuario:
         response = {}
@@ -42,7 +78,7 @@ def LeeTextoA(email, clave, IDtexto):
     return None
 
 def GrabaTextoA(email, clave, datos): #idtexto, texto):
-    bd = DB(nombrebd="aprende")
+    bd = DB(nombrebd="pedi")
     usuario = login(email, clave, bd)
     if usuario:
         # text = bd.escape_string(texto.encode("UTF-8"))
@@ -57,4 +93,21 @@ def GrabaTextoA(email, clave, datos): #idtexto, texto):
 
     bd.cierra()
     return None
+
+
+def ReadLikesI(email, clave, IDlector, values):
+    bd = DB(nombrebd="inv")
+    usuario = logini(email, clave, bd)
+    if usuario:
+        lector = bd.Ejecuta("select * from lectores where ID=%s" % IDlector)[0]
+        v = values.strip()
+        if v:
+            v = v.split()
+            s = "like '%" + v[0] + "%'"
+            s = s + ''.join([" and nombre like '%" + x + "%'" for x in v[1:]])
+            response = bd.Ejecuta("select ID, nombre, cb from productos where nombre %s and IDcliente=%s limit 8" % (s, lector['IDcliente']))
+        else:
+            response = bd.Ejecuta("select ID, nombre, cb from productos where 1=2")
+    bd.cierra()
+    return response
 

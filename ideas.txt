@@ -1,15 +1,41 @@
-Tal vez reemplazo de blog
+Actores
 
-Una persona escribe un texto y elabora los puntos básicos o elementos que quiera resaltar o sobre los que quiera preguntar
+Proveedores
+Se crean e ingresan como myfinan por index.html prov.myfinan.com
+Debe tener una lista de clientes?
+	Como sabe cual es el cliente que le hace el pedido?
 
-Otras personas lo leen y responden o comentan
+Clientes
+Se crean al vuelo, ingresan por cliente.html pedi.myfinan.com
+Debe tener una lista de proveedores?
+	Como elige al proveedor?
 
-Los lectores deben estar autorizados por el escritor para leer
+El proveedor
 
-Tanto lectores como escritores deben tener una cuenta
+Crea una cuenta
+Sube los productos
+Mantenimiento
+	Precios
+	Existencia
+	Nuevos productos
 
-Los escritores llevan un registro de lo que escriben
-Los lectores llevan un registro de lo que leen, contestan y comentan
+	Se hace subiendo otra vez los productos
+		Se puede reemplazar todo el archivo
+		O se puede actualizar por codigo
 
-Los escritos se pueden clasificar por niveles para los estudiantes
 
+El cliente
+
+Selecciona el proveedor
+Se identifica con el numero de telefono
+	El telefono me da la dirección
+Busca los productos uno por uno en un buscador y escribe la cantidad
+Acepta el pedido
+
+El proveedor
+
+Recibe el pedido por email
+Avisa que el pedido fue aceptado
+Lo despacha y lo anota en el sistema
+
+Por ahora no se va a manejar el pago

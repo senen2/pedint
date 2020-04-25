@@ -16,7 +16,7 @@ function verUsuario(datos)
 		// document.cookie = "encabezado=" + encabezado;
 		localStorage.setItem("encabezado", encabezado);
 		localStorage.setItem("email", $("#emaillogin").val());
-		window.location.assign("lee.html");
+		window.location.assign("prov.html");
 	}
 	else
 		alert("nombre de usuario o clave incorrectos");
@@ -24,7 +24,7 @@ function verUsuario(datos)
 
 function inicioIndex() {
 	if (localStorage.getItem("encabezado")) {
-		window.location.assign("lee.html");
+		window.location.assign("prov.html");
 	}
 }
 

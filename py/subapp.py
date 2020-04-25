@@ -8,7 +8,7 @@ Created on 02/01/2015
 # import datetime, decimal
 
 def login(email, clave, bd):
-    rows = bd.Ejecuta("select * from usuarios where email='%s' and clave='%s'" % (email, clave))
+    rows = bd.Ejecuta("select * from prov where email='%s' and clave='%s' and activo=1" % (email, clave))
     if rows:
         return rows[0]
     return None

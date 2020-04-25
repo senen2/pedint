@@ -27,7 +27,7 @@ function dibujaTexto(datos)
 {
 	if (!datos) {
 		document.cookie = "pagpend=" + document.URL;			
-		window.location.assign("index.html");		
+//		window.location.assign("index.html");		
 	}
 	gtexto = datos;
 	$('#usuario').html("Bienvenido(a) " + gtexto.usuario.nombre);

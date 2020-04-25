@@ -2,7 +2,7 @@
  * @author botpi
  */
 
-function inicioLee()
+function inicioProv()
 {
 	// encabezado = getCookie("encabezado");
 	encabezado = localStorage.getItem("encabezado");
@@ -10,8 +10,16 @@ function inicioLee()
 	if (encabezado==null || encabezado=="")
 		encabezado="'',''";
 	leeServidor();
-	refrescar();
+	//refrescar();
 }
+
+function upload()
+{
+	var input = document.getElementById("uploadfile");
+	var file = input.files[0];
+	SubeArchivoP(file, nada)
+}
+
 
 function refrescar()
 {
