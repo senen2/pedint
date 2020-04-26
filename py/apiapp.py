@@ -41,7 +41,9 @@ def CreaProductosP(email, clave, archivo):
     return None
 
 def SubeArchivoP(email, clave, datos): #idtexto, texto):
-    print("llega")
+    # print("llega SubeArchivoP", datos['texto'])
+    print("llega SubeArchivoP long", len(datos['texto']))
+    print("llega SubeArchivoP tipo", type(datos['texto']))
     bd = DB(nombrebd="pedi")
     usuario = login(email, clave, bd)
     if usuario:
@@ -78,6 +80,7 @@ def LeeTextoA(email, clave, IDtexto):
     return None
 
 def GrabaTextoA(email, clave, datos): #idtexto, texto):
+    print("llega GrabaTextoA", datos['texto'])
     bd = DB(nombrebd="pedi")
     usuario = login(email, clave, bd)
     if usuario:

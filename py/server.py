@@ -35,22 +35,7 @@ def GetFunction(funcion):
 @route('/functiond/:funcion', method='POST')
 def PostFunction(funcion):
     datos = request.body
-    if 'buf' in datos:
-        print("llega string")
-        resp = PostServer(funcion, datos.buf)
-    else:
-        print("llega file")
-        # print(request.keys())
-        # print("QUERY_STRING", request['bottle.request'])
-        # print()
-        # print("REQUEST_METHOD", request['bottle.request.body'])
-        # print()
-        # datos.save('/tmp/1.csv')
-        # print("files", request.files)
-        file = request['wsgi.input']
-        print('file', file)
-        print('pasa')
-        resp = PostServer(funcion, file)
+    resp = PostServer(funcion, datos.buf)
 
     par = request.query.decode()
     if "pagina" in par:
@@ -65,37 +50,19 @@ def PostFunction(funcion):
     else:
         return resp
 
-@route('/upload', method='POST')
-def upload():
+@route('/uploadfile', method='POST')
+def uploadlogo():
     id = request.forms.get('id')
-    tipo = request.forms.get('tipo')
-    upload = request.files.get('upload')
+    upload = request.files.get('uploadfile')
     if upload:
         name, ext = os.path.splitext(upload.filename)
         ext = ext.lower()
         f = str(id) + ext
-        file_path = PATH #'/home/carlosg/public_html/'
+        file_path = '/var/www/pedi/public_html/' # PATH #'/home/carlosg/public_html/'
     
-        with open(file_path + 'imgbig/' + f, 'wb') as open_file:
+        with open(file_path + 'tmp/' + f, 'wb') as open_file:
             open_file.write(upload.file.read())
-
-@route('/upload', method='POST')
-def do_upload():
-    category = request.forms.get('category')
-    upload = request.files.get('upload')
-    name, ext = os.path.splitext(upload.filename)
-    if ext not in ('.png', '.jpg', '.jpeg'):
-        return "File extension not allowed."
-
-    save_path = "/tmp/{category}".format(category=category)
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-
-    file_path = "{path}/{file}".format(path=save_path, file=upload.filename)
-    upload.save(file_path)
-    return "File successfully saved to '{0}'.".format(save_path)
-
-
+               
 @route('/')
 @route('/hello/:name')
 def index(name='World'):

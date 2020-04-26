@@ -27,7 +27,16 @@ function SubeArchivoP(file, funcion)
 	var reader = new FileReader();
 
 	reader.addEventListener("load", function () {
-		datos['file'] = reader.result;
+		var d = JSON.stringify(reader.result);
+		//var s = d.split('\\r\\n');
+		var l = d.length;
+		var x = d.substr(1,80000);
+		var y = d.substr(80000,l);
+		var h = y.length;
+		var z = typeof d;
+		//datos['file'] = x;
+		datos['texto'] = x; // "casa bonita";
+		datos['texto2'] = y;
 	    $.post( 'http://' + servidor + '/functiond/SubeArchivoP(' + encabezado + ')?pagina=' + pagina, JSON.stringify(datos))
 	        .always(function(){
 	            funcion();
@@ -35,8 +44,19 @@ function SubeArchivoP(file, funcion)
 	}, false);
 
 	if (file) {
-		reader.readAsText(file);
+		reader.readAsBinaryString(file);
 	}
+}
+
+function GrabaTextoA(texto)
+{
+	var datos = {}
+	datos['idtexto'] = 1; // gtexto.textos[0].id;
+	datos['texto'] = texto;
+    $.post( 'http://' + servidor + '/functiond/GrabaTextoA(' + encabezado + ')?pagina=' + pagina, JSON.stringify(datos))
+        .always(function(){
+            nada();
+        }); 
 }
 
 function LeeTextoA(idtexto, funcion)
@@ -49,15 +69,4 @@ function LeeTextoA(idtexto, funcion)
 			funcion(response);
 		}
 	});	
-}
-
-function GrabaTextoA(texto)
-{
-	var datos = {}
-	datos['idtexto'] = 1; // gtexto.textos[0].id;
-	datos['texto'] = texto;
-    $.post( 'http://' + servidor + '/functiond/GrabaTextoA(' + encabezado + ')?pagina=' + pagina, JSON.stringify(datos))
-        .always(function(){
-            nada();
-        }); 
 }

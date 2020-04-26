@@ -13,11 +13,17 @@ function inicioProv()
 	//refrescar();
 }
 
+function endupload()
+{
+	var a = 5;
+}
+
 function upload()
 {
 	var input = document.getElementById("uploadfile");
 	var file = input.files[0];
 	SubeArchivoP(file, nada)
+	//GrabaTextoA("casa bonita")
 }
 
 
