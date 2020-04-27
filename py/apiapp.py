@@ -20,33 +20,36 @@ def Login(email, clave):
     bd.cierra()
     return None
 
-def CreaProductosP(email, clave, archivo):
-    df = pd.read_csv(archivo)
-    index = []
-
-    with open(archivo, 'r') as read_obj:
-        csv_reader = reader(read_obj)
-        header = next(csv_reader)
-        if header != None:
-            for row in csv_reader:
-                c = row.split(",")
-                bd.Ejecuta("""
-                    insert into % alias productos 
-                    (codigo, nombre, unidad, iva, precio, existencia)
-                    values ('%s', '%s', '%s', %s, %s, %s)")
-                """ % (c[index[0]], c[index[1]], c[index[2]], c[index[3]], c[index[4]], c[index[5]])        
-                )
-
-    bd.cierra()
-    return None
-
-def SubeArchivoP(email, clave, datos): #idtexto, texto):
-    # print("llega SubeArchivoP", datos['texto'])
-    print("llega SubeArchivoP long", len(datos['texto']))
-    print("llega SubeArchivoP tipo", type(datos['texto']))
+def LeeProvP(email, clave):
     bd = DB(nombrebd="pedi")
     usuario = login(email, clave, bd)
     if usuario:
+        bd.cierra()
+        return usuario
+    bd.cierra()
+    return None
+
+def SubeArchivoP(email, clave, datos):
+    # print("llega SubeArchivoP", datos['texto'])
+    bd = DB(nombrebd="pedi")
+    usuario = login(email, clave, bd)
+    if usuario:
+        with open(datos['filename'], 'r') as read_obj:
+            csv_reader = reader(read_obj)
+            header = next(csv_reader)
+            if header != None:
+                for row in csv_reader:
+                    print(row)
+                    # c = row.split(",")
+                    break
+                    # bd.Ejecuta("""
+                    #     insert into % alias productos 
+                    #     (codigo, nombre, unidad, iva, precio, existencia)
+                    #     values ('%s', '%s', '%s', %s, %s, %s)")
+                    # """ % (c[index[0]], c[index[1]], c[index[2]], c[index[3]], c[index[4]], c[index[5]])        
+                    # )
+
+
         texto = datos['texto']
         idtexto = datos['idtexto']
         rows = bd.Ejecuta("select * from textos where id=%s and idusuario=%s" % (idtexto, usuario['ID']))

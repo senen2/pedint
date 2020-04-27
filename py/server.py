@@ -10,6 +10,8 @@ from bottle import get, post, request, ServerAdapter
 from apiweb import GetServer, PostServer, NodoRuta, GetUrl
 import os
 from apiDB import DB
+import json
+from comun import convert
 
 @hook('after_request')
 def enable_cors():
@@ -35,6 +37,9 @@ def GetFunction(funcion):
 @route('/functiond/:funcion', method='POST')
 def PostFunction(funcion):
     datos = request.body
+    print(datos.buf)
+    print(type(datos.buf))
+    print()
     resp = PostServer(funcion, datos.buf)
 
     par = request.query.decode()
@@ -57,12 +62,15 @@ def uploadlogo():
     if upload:
         name, ext = os.path.splitext(upload.filename)
         ext = ext.lower()
-        f = str(id) + ext
-        file_path = '/var/www/pedi/public_html/' # PATH #'/home/carlosg/public_html/'
-    
-        with open(file_path + 'tmp/' + f, 'wb') as open_file:
+        filename = '/var/www/pedi/public_html/tmp/' + name + '.' + ext
+        with open(filename, 'wb') as open_file:
             open_file.write(upload.file.read())
                
+    datos={}
+    datos['filename'] = filename
+    funcion = "SubeArchivoP('%s', '%s')" % (request.forms.get('email'), request.forms.get('clave'))
+    resp = PostServer(funcion, json.dumps(datos))
+
 @route('/')
 @route('/hello/:name')
 def index(name='World'):

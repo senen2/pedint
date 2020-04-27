@@ -24,34 +24,33 @@ def year(fecha):
     hasta = str(fechad.replace(month=1).replace(day=1).replace(year=fechad.year+1)).split(' ')[0]
     return desde, hasta
 
+     
+def convert(obj):
+    """Default JSON serializer."""
 
-# def day(fecha):
-#     fechad = datetime.datetime.strptime(fecha,'%Y-%m-%d')
-#     desde = fechad
-#     desde = fechad.replace(day=desde.day+1)
-#     if desde.month==12:
-#         hasta = desde.replace(year=desde.year+1, month=1)
-#     else:
-#         hasta = desde.replace(month=desde.month+1)
-#     desde = str(desde).split(' ')[0]
-#     hasta = str(hasta).split(' ')[0]
-#     return desde, hasta
-        
-# def month(fecha):
-#     fechad = datetime.datetime.strptime(fecha,'%Y-%m-%d')
-#     desde = fechad.replace(day=1)
-#     if desde.month==12:
-#         hasta = desde.replace(year=desde.year+1, month=1)
-#     else:
-#         hasta = desde.replace(month=desde.month+1)
-#     desde = str(desde).split(' ')[0]
-#     hasta = str(hasta).split(' ')[0]
-#     return desde, hasta
-        
+    try:
+        if isinstance(obj, datetime.datetime):
+            return obj.strftime("%Y-%m-%d %H:%M:%S")
+    except:
+        pass
+    
+    try:
+        if isinstance(obj,  datetime):
+            return obj.strftime("%Y-%m-%d %H:%M:%S")
+    except:
+        pass
 
-# def year(fecha):
-#     fechad = datetime.datetime.strptime(fecha,'%Y-%m-%d')
-#     desde = str(fechad.replace(month=1).replace(day=1)).split(' ')[0]
-#     hasta = str(fechad.replace(month=12).replace(day=31)).split(' ')[0]
-#     return desde, hasta
+    try:
+        if isinstance(obj, datetime.date):
+            return obj.strftime("%Y-%m-%d")
+    except:
+        pass
+    
+    try:
+        if isinstance(obj, decimal.Decimal):
+            return float(obj)
+    except:
+        pass
+
+    return
 
