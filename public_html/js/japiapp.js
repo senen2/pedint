@@ -21,6 +21,18 @@ function nada()
 	var a =5;
 }
 
+function LeeProvP(funcion)
+{
+	$.ajax({
+		url: "http://" + servidor + "/function/LeeProvP(" + encabezado + ")?pagina=" + pagina,
+		jsonp: "callback",
+		dataType: "jsonp",
+		success: function( response ) {
+			funcion(response);
+		}
+	});	
+}
+// Este no es
 function SubeArchivoP(file, funcion)
 {
 	var datos = {}

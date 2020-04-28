@@ -10,22 +10,44 @@ function inicioProv()
 	if (encabezado==null || encabezado=="")
 		encabezado="'',''";
 	leeServidor();
+	LeeProvP(prepara);
 	//refrescar();
 }
 
-function endupload()
+function prepara(datos)
 {
-	var a = 5;
+	usuario = datos;
+	$('#nombre').val(usuario.nombre);
+	$('#campos').val(usuario.campos);
+}
+
+function verArchivo()
+{
+	var input = document.getElementById("uploadfile");
+	var file = input.files[0];
+	var cad = file.name.split('.');
+	if (cad[1].toLowerCase() == 'csv') {		
+		var a = encabezado.split(',');	
+		$('#email').val(a[0].replace("'", "").replace("'", ""));
+		$('#clave').val(a[1].replace("'", "").replace("'", ""));
+		$('#subir').attr('action', 'http://142.93.52.198:8087/uploadfile');
+		$("#enviar").show();
+	}
+	else
+		$("#enviar").hide();
 }
 
 function upload()
 {
-	var input = document.getElementById("uploadfile");
-	var file = input.files[0];
-	SubeArchivoP(file, nada)
-	//GrabaTextoA("casa bonita")
+  	$("#endupload").attr("onload",'endupload();');
+  	$("#busy").show();
 }
 
+function endupload()
+{
+	$("#busy").hide();
+	window.location.assign("prov.html");//reload();
+}
 
 function refrescar()
 {
