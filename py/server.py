@@ -57,12 +57,12 @@ def PostFunction(funcion):
 
 @route('/uploadfile', method='POST')
 def uploadlogo():
-    id = request.forms.get('id')
+    id = request.forms.get('email').split('@')[0]
     upload = request.files.get('uploadfile')
     if upload:
         name, ext = os.path.splitext(upload.filename)
         ext = ext.lower()
-        filename = '/var/www/pedi/public_html/tmp/' + name + '.' + ext
+        filename = '/var/www/pedi/public_html/tmp/' + name + '-' + id + ext
         with open(filename, 'wb') as open_file:
             open_file.write(upload.file.read())
                

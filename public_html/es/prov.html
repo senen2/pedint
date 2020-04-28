@@ -21,6 +21,7 @@
 	<script type="text/javascript" src="../js/japiapp.js"></script>
 	<script type="text/javascript" src="../js/jcomun.js"></script>
 	<script type="text/javascript" src="../js/jgoogle.js"></script>
+    <script type="text/javascript" src="../js/jtabla.js"></script>
     <!-- <script type="text/javascript" src="../js/live.js"></script> -->
 	<style type="text/css">
         #texto {
@@ -43,7 +44,7 @@
 		});
 	</script>
 </head>
-<body align="center">
+<body>
 
 <div id="mask" class="DN" onclick="cancelar();"> </div>
 <div id="mask2" class="DN mask" onclick="menuPop(0);"> </div>
@@ -54,9 +55,7 @@
                 <span onclick="menuPop(1);"></span>
             </div>
             <div class="col2">&nbsp;&nbsp;&nbsp;</div>
-            <div class="col2 welcome">
-                <label id="usuario">Bienvenido(a)</label>
-            </div>
+            <h3 style="width: 300px;">PEDIdos por Internet</h3>
         </div>
         
     </div>
@@ -67,9 +66,9 @@
         <h3 style="margin-left: 20px;">Datos del proveedor</h3>
         <div style="margin-left: 20px; margin-right: 30px;">
             Nombre
-            <input id="nombre" type="text" style="width: 500px;"><br>
+            <input id="nombre" type="text" style="width: 500px;" onchange="updatefield(this);"><br>
             Campos del archivo de productos
-            <input id="campos" type="text" style="width: 330px;"><br>
+            <input id="campos" type="text" style="width: 330px;" onchange="updatefield(this);"><br>
         </div>
     </div>
     <div style="background-color: #fdebd0 ; padding-top: 5px;">
@@ -79,7 +78,7 @@
             <form id="subir" action="" method="post" enctype="multipart/form-data" target="endupload">
         <!--     <form id="subir" action="http://142.93.52.198:8087/uploadfile" method="post" enctype="multipart/form-data">
          -->
-                <div style="border: dviotted 1px gray;border-radius: 3px; width: 320px; height: 120px; padding: 5px">
+                <div style="border: dviotted 1px gray;border-radius: 3px; width: 320px; height: 120px; padding-top: 5px">
                     <input class="btn box-margin-10" style="margin-top: 10px" type="file" id="uploadfile" name="uploadfile" accept="*" onchange="verArchivo();" />
                     <input id="email" name="email" type="hidden">
                     <input id="clave" name="clave" type="hidden">
@@ -92,16 +91,13 @@
     <div style="background-color:  #d6eaf8; padding-top: 5px;">
         <h3 style="margin-left: 20px;">Muestra de 10 productos</h3>
         <div style="margin-left: 20px; margin-right: 30px;">
-            <table id="productos"></table>
+            <table id="productos" style="font-family: arial; font-size: 10px"></table>
         </div>
     </div>
 </div>
 
 <div id="menu" class="config-menu">
     <h2>Menu</h2>
-    <a class="btn-a v2" href="entradas.html"><div><span>Compras Lector</span></div></a>
-    <a class="btn-a v2" href="entradast.html"><div><span>Compras Teclado</span></div></a>
-    <a class="btn-a v2" href="creaprod.html"><div><span>Creación y Modificacion</span></div></a>
     <a class="btn-a v2" href="#" onclick="logout();"><div><span>Salir</span></div></a>
 </div>
 

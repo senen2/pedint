@@ -26,7 +26,11 @@ def LeeProvP(email, clave):
     usuario = login(email, clave, bd)
     if usuario:
         tabla = "prod%s"%usuario['id']
-        usuario["productos"] = bd.Ejecuta("select * from %s limit 10"%tabla)
+        rows = bd.Ejecuta("select * from information_schema.TABLES where TABLE_SCHEMA='pedi' AND TABLE_NAME ='%s'"%tabla)
+        if rows:
+            usuario["productos"] = bd.Ejecuta("select * from %s limit 10"%tabla)
+        else:
+            usuario["productos"] = []
         bd.cierra()
         return usuario
     bd.cierra()
@@ -68,5 +72,14 @@ def SubeArchivoP(email, clave, datos):
                 """ % (tabla, row['codigo'], row['nombre'], row['unidad']
                     , row['precio'], row['iva'], row['existencia']))
         bd.Ejecuta("ALTER TABLE prod1 ADD FULLTEXT INDEX (nombre)")
+    
+    bd.cierra()
+
+def CambiaCampoP(email, clave, datos):
+    # print("llega SubeArchivoP", datos['texto'])
+    bd = DB(nombrebd="pedi")
+    usuario = login(email, clave, bd)
+    if usuario:
+        bd.Ejecuta("update prov set %s='%s' where id=%s"%(datos['nombre'], datos['val'], usuario['id']))
     
     bd.cierra()

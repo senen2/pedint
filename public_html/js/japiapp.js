@@ -60,12 +60,12 @@ function SubeArchivoP(file, funcion)
 	}
 }
 
-function GrabaTextoA(texto)
+function CambiaCampoP(campo)
 {
 	var datos = {}
-	datos['idtexto'] = 1; // gtexto.textos[0].id;
-	datos['texto'] = texto;
-    $.post( 'http://' + servidor + '/functiond/GrabaTextoA(' + encabezado + ')?pagina=' + pagina, JSON.stringify(datos))
+	datos['nombre'] = campo.id;
+	datos['val'] = campo.value;
+    $.post( 'http://' + servidor + '/functiond/CambiaCampoP(' + encabezado + ')?pagina=' + pagina, JSON.stringify(datos))
         .always(function(){
             nada();
         }); 

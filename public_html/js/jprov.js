@@ -17,8 +17,10 @@ function inicioProv()
 function prepara(datos)
 {
 	usuario = datos;
+	//$('#usuario').html('Bienvenido(a) ' + usuario.nombre);
 	$('#nombre').val(usuario.nombre);
 	$('#campos').val(usuario.campos);
+	dibujaCuadroProductos()
 }
 
 function verArchivo()
@@ -32,6 +34,7 @@ function verArchivo()
 		$('#clave').val(a[1].replace("'", "").replace("'", ""));
 		$('#subir').attr('action', 'http://142.93.52.198:8087/uploadfile');
 		$("#enviar").show();
+		$("#enviar").focus();
 	}
 	else
 		$("#enviar").hide();
@@ -39,100 +42,46 @@ function verArchivo()
 
 function upload()
 {
-  	$("#endupload").attr("onload",'endupload();');
+  	$("#endupload").attr("onload",'enduploadf();');
   	$("#busy").show();
 }
 
-function endupload()
+function enduploadf()
 {
 	$("#busy").hide();
 	window.location.assign("prov.html");//reload();
 }
 
-function refrescar()
+function dibujaCuadroProductos()
 {
-	$("#texto").val("");
-	$("#pregunta").val("");
-	$("#opciones").val("");
-	$("#respuesta").val("");	
-	$("#pregunta").focus();
-	LeeTextoA(idtexto, dibujaTexto);
-}
-
-function dibujaTexto(datos)
-{
-	if (!datos) {
-		document.cookie = "pagpend=" + document.URL;			
-		window.location.assign("index.html");		
-	}
-	gtexto = datos;
-	$('#usuario').html("Bienvenido(a) " + gtexto.usuario.nombre);
+	var titulos = [];
 	var userLang = navigator.language || navigator.userLanguage; 
-
-	$("#texto").val(gtexto.textos[0].texto);
-	armaPreguntas(gtexto.preguntas, gtexto.preguntas[0].id, "#preguntas")
-	selPregunta(gtexto.preguntas[0].id)
-	//$("#pregunta").focus();
-
-}
-
-function armaPreguntas(preguntas, idsel, tag)
-{
-	var cad = "", pregunta;
-	$.each(preguntas, function(i,item) {
-		cad = cad + '<textarea id="pregunta-' + item.id + 
-				'"class="pregunta"' +
-				//((item.id==idsel) ? ' background-color: lightblue;' : '') + 
-				' onmouseover="selPregunta(' + item.id + ');"' + 
-				' onmouseout="deselPregunta(' + item.id + ');"' + 
-				'>' +
-		 		item.texto + '</textarea>';
-		 if (item.id==idsel)
-		 	pregunta = item;
-	});
-	$(tag).html(cad);
-	armaOpciones(pregunta.posibles, pregunta.respuesta.id, "#opciones");
-}
-
-function armaOpciones(lista, idsel, tag)
-{
-	var cad = "";
-	$.each(lista, function(i,item) {
-		cad = cad + '<input type="radio" name="opciones" value="' + item.id + '"' +
-				((item.id==idsel) ? ' checked ' : '') + '>' +
-		 		item.texto + '<br>';
-	});
-	$(tag).html(cad);
-}
-
-function selPregunta(idpregunta)
-{
-	$.each(gtexto.preguntas, function(i,item) {
-		 if (item.id==idpregunta)
-		 	pregunta = item;
-	});	
-	if (idpregunta != gtexto.preguntas[0].id)
-		$('#pregunta-' + gtexto.preguntas[0].id).css("background-color", "white");
-	$('#pregunta-' + idpregunta).css("background-color", "lightblue");
-	armaOpciones(pregunta.posibles, pregunta.respuesta.id, "#opciones");
-}
-
-function deselPregunta(idpregunta)
-{
-	$('#pregunta-' + idpregunta).css("background-color", "white");
-}
-
-function grabaTexto()
-{
-	GrabaTextoA($('#texto').val())
-}
-
-function agregaPregunta()
-{
+	if (userLang.indexOf("es") >= 0) {
+       	titulos.push({"titulo":"Codigo", "ancho":120, "alinea":"left", "campo":"codigo"});
+	    titulos.push({"titulo":"Nombre", "ancho":300, "alinea":"left", "campo":"nombre"});
+	    titulos.push({"titulo":"Unidad", "ancho":80, "alinea":"left", "campo":"unidad"});
+	    titulos.push({"titulo":"Precio", "ancho":100, "alinea":"right", "campo":"precio"});
+	    titulos.push({"titulo":"IVA", "ancho":100, "alinea":"right", "campo":"iva"});
+	    titulos.push({"titulo":"Existencia", "ancho":100, "alinea":"right", "campo":"existencia"});
+	}
+	else {
+       	titulos.push({"titulo":"Code", "ancho":120, "alinea":"left", "campo":"codigo"});
+	    titulos.push({"titulo":"Namee", "ancho":300, "alinea":"left", "campo":"nombre"});
+	    titulos.push({"titulo":"Unity", "ancho":80, "alinea":"left", "campo":"unidad"});
+	    titulos.push({"titulo":"Price", "ancho":100, "alinea":"right", "campo":"precio"});
+	    titulos.push({"titulo":"Tax", "ancho":100, "alinea":"right", "campo":"iva"});
+	    titulos.push({"titulo":"stock", "ancho":100, "alinea":"right", "campo":"existencia"});
+	}
+    	
+	var datos = {};
+	datos["titulos"] = titulos;
+	datos["datos"] = usuario.productos;
+	datos["totales"] = [];
 	
+	dibujaTabla(datos, "productos", "productos", "");
 }
 
-function agregaOpcion()
+function updatefield(campo)
 {
-	
+	CambiaCampoP(campo);
 }
