@@ -66,7 +66,7 @@ function dibujaCuadroProductos()
 	}
 	else {
        	titulos.push({"titulo":"Code", "ancho":120, "alinea":"left", "campo":"codigo"});
-	    titulos.push({"titulo":"Namee", "ancho":300, "alinea":"left", "campo":"nombre"});
+	    titulos.push({"titulo":"Name", "ancho":300, "alinea":"left", "campo":"nombre"});
 	    titulos.push({"titulo":"Unity", "ancho":80, "alinea":"left", "campo":"unidad"});
 	    titulos.push({"titulo":"Price", "ancho":100, "alinea":"right", "campo":"precio"});
 	    titulos.push({"titulo":"Tax", "ancho":100, "alinea":"right", "campo":"iva"});

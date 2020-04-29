@@ -2,7 +2,7 @@
  * @author botpi
  */
 
-function inicioLee()
+function inicioCli()
 {
 	// encabezado = getCookie("encabezado");
 	encabezado = localStorage.getItem("encabezado");
@@ -10,93 +10,136 @@ function inicioLee()
 	if (encabezado==null || encabezado=="")
 		encabezado="'',''";
 	leeServidor();
-	refrescar();
+ 	if (typeof gpedido == 'undefined' || gpedido=="" || gpedido==null)
+		gpedido = [];
+
+	$('#telefono').focus();
 }
 
-function refrescar()
+function leeCliP(campo)
 {
-	$("#texto").val("");
-	$("#pregunta").val("");
-	$("#opciones").val("");
-	$("#respuesta").val("");	
-	$("#pregunta").focus();
-	LeeTextoA(idtexto, dibujaTexto);
+	LeeCliP(campo.value.trim(), escribeCli)
 }
 
-function dibujaTexto(datos)
+function escribeCli(datos)
 {
-	if (!datos) {
-		document.cookie = "pagpend=" + document.URL;			
-//		window.location.assign("index.html");		
+	cli = datos;
+	if (datos.cli.direccion) {
+		$('#direccion').val(datos.cli.direccion);
+		$('#direccion').show();
+		$('#titDireccion').show();
+		$('#nombreProv').html(datos.prov[0].nombre);
+		
+		if (datos.prov.length==1) {
+			idprov = datos.prov[0].id;
+			$("#inicio").hide();
+			$('#buscar').show();
+			$('#divPedido').show();
+			$('#tags').focus();
+		}
+		else {
+			$('#titProv').show();
+			$('#prov').show();
+			$.each(datos.prov, function(i, item) {
+				$('#prov').append( $('<option></option>').val(item.id).html(item.nombre) )
+			}); 			
+		}
+
 	}
-	gtexto = datos;
-	$('#usuario').html("Bienvenido(a) " + gtexto.usuario.nombre);
+}
+
+function selProv()
+{
+	$("#inicio").hide();
+}
+
+function dibujaPosibles(posibles)
+{
+	var titulos = [];
 	var userLang = navigator.language || navigator.userLanguage; 
-
-	$("#texto").val(gtexto.textos[0].texto);
-	armaPreguntas(gtexto.preguntas, gtexto.preguntas[0].id, "#preguntas")
-	selPregunta(gtexto.preguntas[0].id)
-	//$("#pregunta").focus();
-
-}
-
-function armaPreguntas(preguntas, idsel, tag)
-{
-	var cad = "", pregunta;
-	$.each(preguntas, function(i,item) {
-		cad = cad + '<textarea id="pregunta-' + item.id + 
-				'"class="pregunta"' +
-				//((item.id==idsel) ? ' background-color: lightblue;' : '') + 
-				' onmouseover="selPregunta(' + item.id + ');"' + 
-				' onmouseout="deselPregunta(' + item.id + ');"' + 
-				'>' +
-		 		item.texto + '</textarea>';
-		 if (item.id==idsel)
-		 	pregunta = item;
-	});
-	$(tag).html(cad);
-	armaOpciones(pregunta.posibles, pregunta.respuesta.id, "#opciones");
-}
-
-function armaOpciones(lista, idsel, tag)
-{
-	var cad = "";
-	$.each(lista, function(i,item) {
-		cad = cad + '<input type="radio" name="opciones" value="' + item.id + '"' +
-				((item.id==idsel) ? ' checked ' : '') + '>' +
-		 		item.texto + '<br>';
-	});
-	$(tag).html(cad);
-}
-
-function selPregunta(idpregunta)
-{
-	$.each(gtexto.preguntas, function(i,item) {
-		 if (item.id==idpregunta)
-		 	pregunta = item;
-	});	
-	if (idpregunta != gtexto.preguntas[0].id)
-		$('#pregunta-' + gtexto.preguntas[0].id).css("background-color", "white");
-	$('#pregunta-' + idpregunta).css("background-color", "lightblue");
-	armaOpciones(pregunta.posibles, pregunta.respuesta.id, "#opciones");
-}
-
-function deselPregunta(idpregunta)
-{
-	$('#pregunta-' + idpregunta).css("background-color", "white");
-}
-
-function grabaTexto()
-{
-	GrabaTextoA($('#texto').val())
-}
-
-function agregaPregunta()
-{
+	if (userLang.indexOf("es") >= 0) {
+	    titulos.push({"titulo":"", "ancho":400, "alinea":"left", "campo":"nombre"});
+	}
+	else {
+	    titulos.push({"titulo":"", "ancho":400, "alinea":"left", "campo":"nombre"});
+	}
 	
+	var datos = {};
+	datos["titulos"] = titulos;
+	datos["datos"] = posibles;
+	datos["totales"] = [];
+	
+	dibujaTabla(datos, "posibles", "posibles", "tomaOpcion");
 }
 
-function agregaOpcion()
+function tomaOpcion(idproducto)
 {
+	LeeProductoP(idproducto, dibujaFormulario);
+}
+
+function dibujaFormulario(datos)
+{
+	$("#agregar").show();
+	$("#nombre").val(datos.nombre);
+	$("#codigo").val(datos.codigo);
+	$("#unidad").val(datos.unidad);
+	$("#precio").val(datos.precio);
+	$("#cantidad").val(0);
+	$("#valor").val(0);
+	$("#cantidad").focus()
+	$("#cantidad").select()
+}
+
+function calValor()
+{
+	$("#valor").val($("#precio").val() * $("#cantidad").val());
+}
+
+function agregaCancel()
+{
+	$("#agregar").hide();
+	$('#tags').focus();
+}
+
+function agregaAlPed()
+{
+	var p = [];
+	p.codigo = $('#codigo').val();
+	p.nombre = $('#nombre').val();
+	p.unidad = $('#unidad').val();
+	p.precio = $('#precio').val();
+	p.cantidad = $('#cantidad').val();
+	p.valor = $('#valor').val();
+	gpedido.push(p);
+	dibujaPedido();
+	$('#agregar').hide();
+}
+
+function dibujaPedido()
+{
+	var titulos = [];
+	var userLang = navigator.language || navigator.userLanguage; 
+	if (userLang.indexOf("es") >= 0) {
+       	titulos.push({"titulo":"Codigo", "ancho":120, "alinea":"left", "campo":"codigo"});
+	    titulos.push({"titulo":"Nombre", "ancho":300, "alinea":"left", "campo":"nombre"});
+	    titulos.push({"titulo":"Unidad", "ancho":30, "alinea":"left", "campo":"unidad"});
+	    titulos.push({"titulo":"Precio", "ancho":80, "alinea":"right", "campo":"precio"});
+	    titulos.push({"titulo":"cantidad", "ancho":80, "alinea":"right", "campo":"cantidad"});
+	    titulos.push({"titulo":"Valor", "ancho":80, "alinea":"right", "campo":"valor"});
+	}
+	else {
+       	titulos.push({"titulo":"Code", "ancho":120, "alinea":"left", "campo":"codigo"});
+	    titulos.push({"titulo":"Name", "ancho":300, "alinea":"left", "campo":"nombre"});
+	    titulos.push({"titulo":"Unity", "ancho":80, "alinea":"left", "campo":"unidad"});
+	    titulos.push({"titulo":"Price", "ancho":100, "alinea":"right", "campo":"precio"});
+	    titulos.push({"titulo":"Quantity", "ancho":100, "alinea":"right", "campo":"cantidad"});
+	    titulos.push({"titulo":"stock", "ancho":100, "alinea":"right", "campo":"valor"});
+	}
+    	
+	var datos = {};
+	datos["titulos"] = titulos;
+	datos["datos"] = gpedido;
+	datos["totales"] = [];
 	
+	dibujaTabla(datos, "pedido", "pedido", "");
 }

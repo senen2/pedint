@@ -89,5 +89,6 @@ def NodoRuta(funcion, request, pagina):
 #     f = funcion.split("(")[0]
     f = funcion.replace("'",'"')
     email = funcion.split(",")[0].split("(")[1]
-    ip = request.remote_addr
-    GrabaNodoRuta(email, ip, f, pagina)
+    if '@' in email:
+        ip = request.remote_addr
+        GrabaNodoRuta(email, ip, f, pagina)

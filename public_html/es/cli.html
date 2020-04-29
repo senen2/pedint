@@ -21,6 +21,7 @@
 	<script type="text/javascript" src="../js/japiapp.js"></script>
 	<script type="text/javascript" src="../js/jcomun.js"></script>
 	<script type="text/javascript" src="../js/jgoogle.js"></script>
+    <script type="text/javascript" src="../js/jtabla.js"></script>
     <!-- <script type="text/javascript" src="../js/live.js"></script> -->
 	<style type="text/css">
         #texto {
@@ -42,7 +43,7 @@
 		});
 	</script>
 </head>
-<body align="center">
+<body>
 
 <div id="mask" class="DN" onclick="cancelar();"> </div>
 <div id="mask2" class="DN mask" onclick="menuPop(0);"> </div>
@@ -52,59 +53,70 @@
             <div class="col2 menu-img">
                 <span onclick="menuPop(1);"></span>
             </div>
-            <div class="col2">&nbsp;&nbsp;&nbsp;</div>
-            <div class="col2 welcome">
-                <label id="usuario">Bienvenido(a)</label>
-            </div>
+            <h3 style="width: 300px;">PEDIdos por Internet</h3>
         </div>
         
     </div>
 </div>
 
-<div style="margin-left: 20px; margin-right: 30px;">
-<table>
-    <tr style="background-color: lightblue;">
-        <th>
-            <h3>Texto</h3>
-        </th>
-        <th>
-            <h3>Pregunta</h3>
-        </th>
-        <th>
-            <h3>Posibles</h3>
-        </th>
-    </tr>
-    <tr style="height: 400px">
-        <td style="border: 1px dotted;">
-            <textarea id="texto"></textarea>
-        </td>
-        <td style="width: 20%; border: 1px dotted;">
-            <div id="preguntas" style="width: 100%; height: 400px; overflow-y: auto; background-color: white;"></div>
-        </td>
-        <td style="width: 20%; height: 400px; border: 1px dotted;">
-            <form id="opciones" style="width: 100%; height: 400px; background-color: white"></form>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button style="width: 100%;" onclick="grabaTexto();"><h3>Grabar</h3></button>
-        </td>
-        <td>
-            <button style="width: 100%;" onclick="agregaPregunta();"><h3>Agregar</h3></button>
-        </td>
-        <td>
-            <button style="width: 100%;" onclick="agregaOpcion();"><h3>Agregar</h3></button>
-        </td>
-    </tr>
-</table>
-</div>
+<div style="border-width: 1px; margin-left: 10px; margin-right: 10px;">
+    <div id="inicio" style="background-color: #d6eaf8; padding-bottom: 20px; padding-top: 5px;">
+        <h3 style="margin-left: 20px;">Datos del cliente</h3>
+        <div style="margin-left: 20px; margin-right: 30px;">
+            Telefono
+            <input id="telefono" type="text" style="width: 100px;" onchange="leeCliP(this);"><br>
+            <label id="titDireccion" style="display: none;">Direccion</label>
+            <input id="direccion" type="text" style="width: 400px; display: none;" onchange="updatefield(this);"><br><br>
+            <label id="titProv" style="display: none;">Seleccione un Proveedor</label>
+            <select id="prov" class="DN" onchange="verProv();"></select>
+        </div>
+    </div>
 
-<div id="menu" class="config-menu">
-    <h2>Menu</h2>
-    <a class="btn-a v2" href="entradas.html"><div><span>Compras Lector</span></div></a>
-    <a class="btn-a v2" href="entradast.html"><div><span>Compras Teclado</span></div></a>
-    <a class="btn-a v2" href="creaprod.html"><div><span>Creación y Modificacion</span></div></a>
-    <a class="btn-a v2" href="#" onclick="logout();"><div><span>Salir</span></div></a>
+    <div id="buscar" style="background-color: #fdebd0; padding-top: 5px; display: none;">
+        <h3 id="nombreProv" style="margin-left: 20px;"></h3>
+        <div style="margin-left: 20px; margin-right: 30px;">
+            <label style="margin-left: 20px;">Buscar un producto</h3>
+            <input id="tags" style="width: 200px;" onkeyup="ReadLikesP($('#tags').val(), dibujaPosibles);">
+            </div>
+            <div class="section">
+                <div class="container">
+                    <div id="movimientosPanel" class="fila">
+                        <div id="entradasPanel" class="col mo inOut scroll">
+                            <table id="posibles" style="font-family: arial; font-size: 10px; color: black" class=""> </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="agregar" style="background-color: #d6eaf8; padding-bottom: 20px; padding-top: 5px; display: none;background-color: #d6eaf8; margin-left: 10px;">
+        <h3 style="margin-left: 20px;">Agregar al Pedido</h3>
+        <div style="margin-left: 20px; margin-right: 30px;">
+            Codigo&nbsp;&nbsp;&nbsp;
+            <input id="codigo" readonly /><br>
+            Nombre&nbsp;&nbsp;
+            <input id="nombre" style="width: 400px;" readony /><br>
+            Unidad&nbsp;&nbsp;&nbsp;
+            <input id="unidad" readonly /><br>
+            Cantidad
+            <input id="cantidad" autofocus onkeyup="calValor();" /><br>
+            Precio&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="precio" readonly="" /><br>
+            Valor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="valor" style="width: 100px;" readonly="" /><br><br>
+            <button onclick="agregaCancel();">Cancelar</button>
+            <button onclick="agregaAlPed();">Agregar al Pedido</button>
+        </div>
+    </div>
+
+    <div id="divPedido" style="background-color: #d6eaf8; padding-top: 5px; margin-left: 10px; margin-right: 10px; display: none;">
+        <h3 style="margin-left: 20px;">Pedido</h3>
+        <div style="margin-left: 20px; margin-right: 30px;">
+            <table id="pedido" style="font-family: arial; font-size: 12px"></table>
+        </div>
+    </div>
 </div>
 
 </body>

@@ -15,8 +15,8 @@ def GrabaNodoRuta(email, ip, funcion, pag):
         usuario = dict()
         usuario["ID"]=0
     funcion = funcion.decode("utf8").encode("utf8")
-    print(funcion)
-    bd.Ejecuta("insert into rutas (IDusuario, ip, funcion, pag, fecha) values (%s,'%s','%s','%s',sysdate())" % (usuario["ID"], ip, "probando", pag))
+    # print(funcion)
+    bd.Ejecuta("insert into rutas (IDusuario, ip, funcion, pag, fecha) values (%s,'%s','%s','%s',sysdate())" % (usuario["ID"], ip, funcion, pag))
     # idusuario = usuario['ID']
     # bd.c.execute("""insert into rutas (IDusuario, ip, funcion, pag, fecha) values (%s,'%s','%s','%s',sysdate())""",
     # 		 (idusuario, ip, funcion, pag))

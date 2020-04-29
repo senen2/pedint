@@ -71,10 +71,34 @@ function CambiaCampoP(campo)
         }); 
 }
 
-function LeeTextoA(idtexto, funcion)
+function LeeCliP(telefono, funcion)
 {
 	$.ajax({
-		url: "http://" + servidor + "/function/LeeTextoA(" + encabezado + "," + idtexto + ")?pagina=" + pagina,
+		url: "http://" + servidor + "/function/LeeCliP('" + telefono + "')?pagina=" + pagina,
+		jsonp: "callback",
+		dataType: "jsonp",
+		success: function( response ) {
+			funcion(response);
+		}
+	});	
+}
+
+function ReadLikesP(ventrada, funcion)
+{
+	$.ajax({
+		url: "http://" + servidor + "/function/ReadLikesP(" + idprov + ",'" + ventrada + "'" + ")?pagina=" + pagina,
+		jsonp: "callback",
+		dataType: "jsonp",
+		success: function( response ) {
+			funcion(response);
+		}
+	});	
+}
+
+function LeeProductoP(idproducto, funcion)
+{
+	$.ajax({
+		url: "http://" + servidor + "/function/LeeProductoP("+ idprov + ',' + idproducto + ")?pagina=" + pagina,
 		jsonp: "callback",
 		dataType: "jsonp",
 		success: function( response ) {

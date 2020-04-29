@@ -83,3 +83,38 @@ def CambiaCampoP(email, clave, datos):
         bd.Ejecuta("update prov set %s='%s' where id=%s"%(datos['nombre'], datos['val'], usuario['id']))
     
     bd.cierra()
+
+def LeeCliP(telefono):
+    bd = DB(nombrebd="pedi")
+    rows = bd.Ejecuta("select * from cli where telefono='%s'"%telefono)
+    if rows:
+        response = {}
+        response['cli'] = rows[0]
+        response['prov'] = bd.Ejecuta("select * from prov where activo=1 order by nombre")
+        return response
+
+    bd.cierra()
+
+def ReadLikesP(idprov, values):
+    bd = DB(nombrebd="pedi")
+    tabla = "prod%s"%idprov
+    v = values.strip()
+    if v:
+        v = v.split()
+        s = "like '%" + v[0] + "%'"
+        s = s + ''.join([" and nombre like '%" + x + "%'" for x in v[1:]])
+        print("select ID, nombrefrom %s where nombre %s limit 8" % (tabla, s))
+        response = bd.Ejecuta("select ID, nombre from %s where nombre %s limit 8" % (tabla, s))
+    else:
+        response = bd.Ejecuta("select ID, nombre from %s where 1=2"%tabla)
+    bd.cierra()
+    return response
+
+def LeeProductoP(idprov, idproducto):
+    bd = DB(nombrebd="pedi")
+    tabla = "prod%s"%idprov
+    rows = bd.Ejecuta("select * from %s where id='%s'"%(tabla, idproducto))
+    if rows:
+        return rows[0]
+
+    bd.cierra()
