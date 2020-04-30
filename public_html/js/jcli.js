@@ -23,7 +23,7 @@ function leeCliP(campo)
 
 function escribeCli(datos)
 {
-	cli = datos;
+	gcli = datos;
 	if (datos.cli.direccion) {
 		$('#direccion').val(datos.cli.direccion);
 		$('#direccion').show();
@@ -32,10 +32,7 @@ function escribeCli(datos)
 		
 		if (datos.prov.length==1) {
 			idprov = datos.prov[0].id;
-			$("#inicio").hide();
-			$('#buscar').show();
-			$('#divPedido').show();
-			$('#tags').focus();
+			dibBuscar();
 		}
 		else {
 			$('#titProv').show();
@@ -44,8 +41,15 @@ function escribeCli(datos)
 				$('#prov').append( $('<option></option>').val(item.id).html(item.nombre) )
 			}); 			
 		}
-
 	}
+}
+
+function dibBuscar()
+{
+	$("#inicio").hide();
+	$('#buscar').show();
+	$('#divPedido').show();
+	$('#tags').focus();	
 }
 
 function selProv()
@@ -79,6 +83,7 @@ function tomaOpcion(idproducto)
 
 function dibujaFormulario(datos)
 {
+	gprod = datos;
 	$("#agregar").show();
 	$("#nombre").val(datos.nombre);
 	$("#codigo").val(datos.codigo);
@@ -90,9 +95,17 @@ function dibujaFormulario(datos)
 	$("#cantidad").select()
 }
 
-function calValor()
+function calValor(event)
 {
-	$("#valor").val($("#precio").val() * $("#cantidad").val());
+	var k = event.keyCode;
+	if (k>=48 & k<=57)
+		$("#valor").val($("#precio").val() * $("#cantidad").val());
+	else {
+		if (k==13)
+			agregaAlPed();
+		else
+			agregaCancel();		
+	}
 }
 
 function agregaCancel()
@@ -104,6 +117,7 @@ function agregaCancel()
 function agregaAlPed()
 {
 	var p = [];
+	p.id = gprod.id;
 	p.codigo = $('#codigo').val();
 	p.nombre = $('#nombre').val();
 	p.unidad = $('#unidad').val();
@@ -111,8 +125,11 @@ function agregaAlPed()
 	p.cantidad = $('#cantidad').val();
 	p.valor = $('#valor').val();
 	gpedido.push(p);
+
+	$("#titPed").html("Pedido - Total: $" + totalPed().toString())
 	dibujaPedido();
 	$('#agregar').hide();
+	$('#titEnviar').show();
 }
 
 function dibujaPedido()
@@ -142,4 +159,23 @@ function dibujaPedido()
 	datos["totales"] = [];
 	
 	dibujaTabla(datos, "pedido", "pedido", "");
+}
+
+function totalPed()
+{
+	var s = 0;
+	$.each(gpedido, function(i, item) {
+		s = s + Number(item.valor);
+	});
+	return s; 				
+}
+
+function pedEnviado()
+{
+	alert("Su pedido ha sido enviado");
+	gpedido = [];
+	$('#pedido').html('');
+	//$('#divPedido').hide();
+	$("#titEnviar").hide();
+	dibBuscar();
 }

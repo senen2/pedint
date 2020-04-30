@@ -106,3 +106,24 @@ function LeeProductoP(idproducto, funcion)
 		}
 	});	
 }
+
+function EnviarPedP(funcion)
+{
+	var datos = {},	ped = [];
+	datos['idprov'] = gcli.prov[0].id;
+	datos['idcli'] = gcli.cli.id;
+	datos['ped'] = ped;
+
+	$.each(gpedido, function(i, item) {
+		var p = {};
+		p.id = item.id;
+		p.precio = item.precio;
+		p.cantidad = item.cantidad;
+		ped.push(p)
+	});
+
+    $.post( 'http://' + servidor + '/functiond/EnviarPedP()?pagina=' + pagina, JSON.stringify(datos))
+        .always(function(){
+            funcion();
+        }); 
+}

@@ -84,6 +84,8 @@ def CambiaCampoP(email, clave, datos):
     
     bd.cierra()
 
+# cli --------------------------------
+
 def LeeCliP(telefono):
     bd = DB(nombrebd="pedi")
     rows = bd.Ejecuta("select * from cli where telefono='%s'"%telefono)
@@ -118,3 +120,16 @@ def LeeProductoP(idprov, idproducto):
         return rows[0]
 
     bd.cierra()
+
+def EnviarPedP(datos):
+    bd = DB(nombrebd="pedi")
+    tabla = "prod%s"%datos['idprov']
+    bd.Ejecuta("insert into pedicab (idprov, idcli, fecha) values(%s, %s, now())"%(datos['idprov'], datos['idcli']))
+    idped = bd.UltimoID()
+    s = 0
+    for row in datos['ped']:
+        bd.Ejecuta("insert into pedidet (idpedicab, idproducto, cantidad, precio) values(%s, %s, %s, %s)"%(idped, row['id'], row['cantidad'], row['precio']))
+        s += float(row['cantidad']) * float(row['precio'])
+    bd.Ejecuta("update pedicab set valor=%s where id=%s"%(s, idped))
+
+    bd.cierra()    
