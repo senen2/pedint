@@ -36,6 +36,34 @@ def LeeProvP(email, clave):
     bd.cierra()
     return None
 
+def LeeProvPendP(email, clave):
+    bd = DB(nombrebd="pedi")
+    usuario = login(email, clave, bd)
+    if usuario:
+        usuario["pendientes"] = bd.Ejecuta("""
+            select *, telefono, direccion, pedicab.id as ID from pedicab inner join cli on cli.id=pedicab.idcli
+            where idprov=%s and pendiente=1
+            """%usuario['id'])
+        bd.cierra()
+        return usuario
+    bd.cierra()
+    return None
+
+def LeePedidoP(email, clave, idpedido):
+    bd = DB(nombrebd="pedi")
+    usuario = login(email, clave, bd)
+    if usuario:
+        tabla = "prod%s"%usuario['id']
+        rows = bd.Ejecuta("""
+            select prod.*, cantidad, pedidet.id as idpedidet 
+            from pedidet inner join %s as prod on prod.id=pedidet.idproducto
+            where pedidet.idpedicab=%s
+            """%(tabla, idpedido))
+        bd.cierra()
+        return rows
+    bd.cierra()
+    return None
+
 def numero(val):
     val = val.str.replace('.', '').str.replace(',', '.')
     return pd.to_numeric(val, downcast="float") # val.astype(float)

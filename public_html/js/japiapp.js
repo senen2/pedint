@@ -32,7 +32,31 @@ function LeeProvP(funcion)
 		}
 	});	
 }
-// Este no es
+
+function LeeProvPendP(funcion)
+{
+	$.ajax({
+		url: "http://" + servidor + "/function/LeeProvPendP(" + encabezado + ")?pagina=" + pagina,
+		jsonp: "callback",
+		dataType: "jsonp",
+		success: function( response ) {
+			funcion(response);
+		}
+	});	
+}
+
+function LeePedidoP(idpedido, funcion)
+{
+	$.ajax({
+		url: "http://" + servidor + "/function/LeePedidoP(" + encabezado + "," + idpedido + ")?pagina=" + pagina,
+		jsonp: "callback",
+		dataType: "jsonp",
+		success: function( response ) {
+			funcion(response);
+		}
+	});	
+}
+
 function SubeArchivoP(file, funcion)
 {
 	var datos = {}
