@@ -118,6 +118,8 @@ function agregaAlPed()
 {
 	var p = [];
 	p.id = gprod.id;
+	p.eliminar = 'X';
+	p.ID = gpedido.length + 1;
 	p.codigo = $('#codigo').val();
 	p.nombre = $('#nombre').val();
 	p.unidad = $('#unidad').val();
@@ -141,8 +143,9 @@ function dibujaPedido()
 	    titulos.push({"titulo":"Nombre", "ancho":300, "alinea":"left", "campo":"nombre"});
 	    titulos.push({"titulo":"Unidad", "ancho":30, "alinea":"left", "campo":"unidad"});
 	    titulos.push({"titulo":"Precio", "ancho":80, "alinea":"right", "campo":"precio"});
-	    titulos.push({"titulo":"cantidad", "ancho":80, "alinea":"right", "campo":"cantidad"});
+	    titulos.push({"titulo":"cantidad", "ancho":80, "alinea":"right", "campo":"cantidad", "input":"normal", "funcioninput":"valRenglon"});
 	    titulos.push({"titulo":"Valor", "ancho":80, "alinea":"right", "campo":"valor"});
+	    titulos.push({"titulo":"Eliminar", "ancho":70, "alinea":"left", "campo":"eliminar", "linktext": "#", "link": "", "funcion":"eliminaRenglon"});
 	}
 	else {
        	titulos.push({"titulo":"Code", "ancho":120, "alinea":"left", "campo":"codigo"});
@@ -159,6 +162,39 @@ function dibujaPedido()
 	datos["totales"] = [];
 	
 	dibujaTabla(datos, "pedido", "pedido", "");
+}
+
+function eliminaRenglon(ID)
+{
+	gpedido.splice(buscaID(ID), 1);
+	dibujaPedido();
+	$("#titPed").html("Pedido - Total: $" + totalPed().toString())
+}
+
+function buscaID(ID)
+{
+	$.each(gpedido, function(i, item) {
+		if (item.ID==ID) {
+			return i;
+		}
+	});
+	return -1;
+}
+
+function valRenglon(ID)
+{
+	var p = Number($('#precio-' + ID).html());
+	var c =  Number($('#cantidad-' + ID).val());
+	var v = p * c;
+	$('#valor-' + ID).html(v)
+
+	$.each(gpedido, function(i, item) {
+		if (item.ID==ID) {
+			item.cantidad = c;
+			item.valor = v;
+		}
+	});
+	$("#titPed").html("Pedido - Total: $" + totalPed().toString())
 }
 
 function totalPed()

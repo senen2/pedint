@@ -56,8 +56,8 @@ function dibujaCelda(item, itemtit)
 			val = item[itemtit.link];
 		funcion = "";
 		if (itemtit.funcion!="")
-			funcion=item[itemtit.funcion];
-		return td + '<a class="normal" style="font-weight: 700" href="'
+			funcion='onclick="' + itemtit.funcion +'(' + item.ID + ');"';
+		return td + '<a class="normal" style="font-weight: 900" href="'
 			  + itemtit.linktext + val + '" ' + funcion + aviso + '>' 
 			  + item[itemtit.campo] + '</a></td>';								
 	}
@@ -84,7 +84,7 @@ function dibujaCelda(item, itemtit)
 	else if ("img" in itemtit)
 		return '<td><a href="' + itemtit.img + item[itemtit.imgcampo] + '"><img width="' + (itemtit.ancho-4) + 'px" src="' + item[itemtit.campo] + '"/></a></td>';
 	else
-		return td + '<label>' + item[itemtit.campo] + '</label></td>';
+		return td + '<label id="' + itemtit.campo + '-' + item.ID + '" >'  + item[itemtit.campo] + '</label></td>';
 	
 	return "";
 }
