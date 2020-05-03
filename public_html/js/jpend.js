@@ -18,6 +18,7 @@ function prepara(datos)
 {
 	usuario = datos;
 	$('#nombre').val(usuario.nombre);
+	$('#productos').html('')
 	dibujaCuadroPendientes()
 }
 
@@ -30,6 +31,7 @@ function dibujaCuadroPendientes()
 	    titulos.push({"titulo":"Direccion", "ancho":300, "alinea":"left", "campo":"direccion"});
 	    titulos.push({"titulo":"Valor", "ancho":80, "alinea":"left", "campo":"valor"});
 	    titulos.push({"titulo":"Fecha", "ancho":140, "alinea":"right", "campo":"fecha"});
+	    titulos.push({"titulo":"Despachar", "ancho":70, "alinea":"left", "campo":"despachar", "linktext": "#", "link": "", "funcion":"despachar"});
 	}
 	else {
        	titulos.push({"titulo":"Phone", "ancho":120, "alinea":"left", "campo":"telefono"});
@@ -46,6 +48,13 @@ function dibujaCuadroPendientes()
 	dibujaTabla(datos, "pedidos", "pedidos", "leePedido");
 }
 
+
+function despachar(ID)
+{
+	if (confirm("seguro de despachar este pedido?")) {
+		DespacharP(ID, prepara);
+	}
+}
 
 function leePedido(IDpedido)
 {

@@ -36,12 +36,28 @@ def LeeProvP(email, clave):
     bd.cierra()
     return None
 
+def DespacharP(email, clave, idpedido):
+    bd = DB(nombrebd="pedi")
+    usuario = login(email, clave, bd)
+    if usuario:
+        bd.Ejecuta("update pedicab set pendiente=0 where id=%s"%idpedido)
+        usuario["pendientes"] = bd.Ejecuta("""
+            select *, telefono, direccion, pedicab.id as ID, 'X' as despachar 
+            from pedicab inner join cli on cli.id=pedicab.idcli
+            where idprov=%s and pendiente=1
+            """%usuario['id'])
+        bd.cierra()
+        return usuario
+    bd.cierra()
+    return None
+
 def LeeProvPendP(email, clave):
     bd = DB(nombrebd="pedi")
     usuario = login(email, clave, bd)
     if usuario:
         usuario["pendientes"] = bd.Ejecuta("""
-            select *, telefono, direccion, pedicab.id as ID from pedicab inner join cli on cli.id=pedicab.idcli
+            select *, telefono, direccion, pedicab.id as ID, 'X' as despachar 
+            from pedicab inner join cli on cli.id=pedicab.idcli
             where idprov=%s and pendiente=1
             """%usuario['id'])
         bd.cierra()
@@ -106,21 +122,30 @@ def SubeArchivoP(email, clave, datos):
 def CambiaCampoP(email, clave, datos):
     # print("llega SubeArchivoP", datos['texto'])
     bd = DB(nombrebd="pedi")
-    usuario = login(email, clave, bd)
-    if usuario:
-        bd.Ejecuta("update prov set %s='%s' where id=%s"%(datos['nombre'], datos['val'], usuario['id']))
-    
+    if datos['tabla'] == 'prov':
+        usuario = login(email, clave, bd)
+        if usuario:
+            bd.Ejecuta("update prov set %s='%s' where id=%s"%(datos['nombre'], datos['val'], usuario['id']))
+    elif datos['tabla'] == 'cli':
+        bd.Ejecuta("update cli set %s='%s' where telefono='%s'"%(datos['nombre'], datos['val'], datos['telefono']))
+
     bd.cierra()
 
 # cli --------------------------------
 
 def LeeCliP(telefono):
     bd = DB(nombrebd="pedi")
+
     rows = bd.Ejecuta("select * from cli where telefono='%s'"%telefono)
+    if not rows:
+        bd.Ejecuta("insert into cli (telefono) values ('%s')"%telefono)
+        bd.commit()
+        rows = bd.Ejecuta("select * from cli where telefono='%s'"%telefono)
+    
     if rows:
         response = {}
         response['cli'] = rows[0]
-        response['prov'] = bd.Ejecuta("select * from prov where activo=1 order by nombre")
+        response['prov'] = bd.Ejecuta("select *, id as ID from prov where activo=1 order by nombre")
         return response
 
     bd.cierra()

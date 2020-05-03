@@ -66,9 +66,9 @@
             Telefono
             <input id="telefono" type="text" style="width: 100px;" onchange="leeCliP(this);"><br>
             <label id="titDireccion" style="display: none;">Direccion</label>
-            <input id="direccion" type="text" style="width: 400px; display: none;" onchange="updatefield(this);"><br><br>
-            <label id="titProv" style="display: none;">Seleccione un Proveedor</label>
-            <select id="prov" class="DN" onchange="verProv();"></select>
+            <input id="direccion" type="text" style="width: 400px; display: none;" onchange="CambiaCampoP(this, 'cli');"><br><br>
+            <label id="titProv" style="display: none;">Proveedor</label>
+            <select id="provs" class="DN" onchange="selProv();"></select>
         </div>
     </div>
 

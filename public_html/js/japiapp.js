@@ -57,6 +57,18 @@ function LeePedidoP(idpedido, funcion)
 	});	
 }
 
+function DespacharP(idpedido, funcion)
+{
+	$.ajax({
+		url: "http://" + servidor + "/function/DespacharP(" + encabezado + "," + idpedido + ")?pagina=" + pagina,
+		jsonp: "callback",
+		dataType: "jsonp",
+		success: function( response ) {
+			funcion(response);
+		}
+	});	
+}
+
 function SubeArchivoP(file, funcion)
 {
 	var datos = {}
@@ -84,11 +96,13 @@ function SubeArchivoP(file, funcion)
 	}
 }
 
-function CambiaCampoP(campo)
+function CambiaCampoP(campo, tabla)
 {
 	var datos = {}
 	datos['nombre'] = campo.id;
 	datos['val'] = campo.value;
+	datos['tabla'] = tabla;
+	datos['telefono'] = $("#telefono").val();
     $.post( 'http://' + servidor + '/functiond/CambiaCampoP(' + encabezado + ')?pagina=' + pagina, JSON.stringify(datos))
         .always(function(){
             nada();
@@ -106,7 +120,19 @@ function LeeCliP(telefono, funcion)
 		}
 	});	
 }
-
+/*
+function CambiaCampoCliP(campo, funcion)
+{
+	$.ajax({
+		url: "http://" + servidor + "/function/CambiaCampoCliP('" + campo.id + "','" + campo.val + "')?pagina=" + pagina,
+		jsonp: "callback",
+		dataType: "jsonp",
+		success: function( response ) {
+			funcion(response);
+		}
+	});	
+}
+*/
 function ReadLikesP(ventrada, funcion)
 {
 	$.ajax({

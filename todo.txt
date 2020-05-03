@@ -1,25 +1,19 @@
 Cli
+	Seleccionar proveedor
+
 	no permitir cambio de proveedor cuando haya empezado un pedido
 		o mejor, abrir una pagina de pedido por cada proveedor
 		o mejor aun, borrar hasta la selección del proveedor
 
-	grabar direccion
-
 	grabar nodoruta para cli
 
-	calcular iva
-
-	Seleccionar proveedor
-
 	Historia de pedidos
+		para esto necesita login
 		repetir pedido
 		repetir producto
 
 Prov
-	Despachar
 
-	opciones
-		no meterme con el iva
-		usar precio o solo cantidades
+	usar precio o solo cantidades
 
 	

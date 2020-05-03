@@ -24,25 +24,32 @@ function leeCliP(campo)
 function escribeCli(datos)
 {
 	gcli = datos;
-	if (datos.cli.direccion) {
-		$('#direccion').val(datos.cli.direccion);
-		$('#direccion').show();
-		$('#titDireccion').show();
-		$('#nombreProv').html(datos.prov[0].nombre);
-		
-		if (datos.prov.length==1) {
-			idprov = datos.prov[0].id;
-			dibBuscar();
-		}
-		else {
-			$('#titProv').show();
-			$('#prov').show();
-			$.each(datos.prov, function(i, item) {
-				$('#prov').append( $('<option></option>').val(item.id).html(item.nombre) )
-			}); 			
-		}
+	$('#direccion').val(datos.cli.direccion);
+	$('#direccion').show();
+	$('#titDireccion').show();
+	$('#nombreProv').html(datos.prov[0].nombre);
+
+	if (datos.prov.length==1) {
+		idprov = datos.prov[0].id;
+		dibBuscar();
 	}
+	else {
+		llenaSelector(datos.prov, "provs");
+		$('#titProv').show();
+		$('#provs').show();
+/*		$.each(datos.prov, function(i, item) {
+			$('#provs').append( $('<option></option>').val(item.id).html(item.nombre) )
+		}); 			
+*/	}
 }
+
+function selProv()
+{
+	idprov = $('#provs').val();
+	if (idprov)
+		dibBuscar();
+}
+
 
 function dibBuscar()
 {
@@ -50,11 +57,6 @@ function dibBuscar()
 	$('#buscar').show();
 	$('#divPedido').show();
 	$('#tags').focus();	
-}
-
-function selProv()
-{
-	$("#inicio").hide();
 }
 
 function dibujaPosibles(posibles)
@@ -166,19 +168,21 @@ function dibujaPedido()
 
 function eliminaRenglon(ID)
 {
-	gpedido.splice(buscaID(ID), 1);
+	var i = buscaID(ID);
+	gpedido.splice(i, 1);
 	dibujaPedido();
 	$("#titPed").html("Pedido - Total: $" + totalPed().toString())
 }
 
 function buscaID(ID)
 {
+	var iv = -1;
 	$.each(gpedido, function(i, item) {
 		if (item.ID==ID) {
-			return i;
+			iv = i;
 		}
 	});
-	return -1;
+	return iv;
 }
 
 function valRenglon(ID)
