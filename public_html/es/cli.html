@@ -64,7 +64,7 @@
         <h3 style="margin-left: 20px;">Datos del cliente</h3>
         <div style="margin-left: 20px; margin-right: 30px;">
             Telefono
-            <input id="telefono" type="text" style="width: 100px;" onchange="leeCliP(this);"><br>
+            <input id="telefono" type="text" style="width: 100px;" onchange="leeCliP(this);" onkeyup="verEnter(event, this);"><br>
             <label id="titDireccion" style="display: none;">Direccion</label>
             <input id="direccion" type="text" style="width: 400px; display: none;" onchange="CambiaCampoP(this, 'cli');"><br><br>
             <label id="titProv" style="display: none;">Proveedor</label>

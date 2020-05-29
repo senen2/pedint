@@ -150,7 +150,7 @@ def LeeCliP(telefono):
 
     bd.cierra()
 
-def ReadLikesP(idprov, values):
+def ReadLikesP(idprov, values, nret):
     bd = DB(nombrebd="pedi")
     tabla = "prod%s"%idprov
     v = values.strip()
@@ -158,8 +158,8 @@ def ReadLikesP(idprov, values):
         v = v.split()
         s = "like '%" + v[0] + "%'"
         s = s + ''.join([" and nombre like '%" + x + "%'" for x in v[1:]])
-        print("select ID, nombrefrom %s where nombre %s limit 8" % (tabla, s))
-        response = bd.Ejecuta("select ID, nombre from %s where nombre %s limit 8" % (tabla, s))
+        # print("select ID, nombrefrom %s where nombre %s limit %s" % (tabla, s, nret))
+        response = bd.Ejecuta("select ID, nombre from %s where nombre %s limit %s" % (tabla, s, nret))
     else:
         response = bd.Ejecuta("select ID, nombre from %s where 1=2"%tabla)
     bd.cierra()

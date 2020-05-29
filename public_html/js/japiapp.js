@@ -136,7 +136,7 @@ function CambiaCampoCliP(campo, funcion)
 function ReadLikesP(ventrada, funcion)
 {
 	$.ajax({
-		url: "http://" + servidor + "/function/ReadLikesP(" + idprov + ",'" + ventrada + "'" + ")?pagina=" + pagina,
+		url: "http://" + servidor + "/function/ReadLikesP(" + idprov + ",'" + ventrada + "', 12)?pagina=" + pagina,
 		jsonp: "callback",
 		dataType: "jsonp",
 		success: function( response ) {

@@ -16,6 +16,13 @@ function inicioCli()
 	$('#telefono').focus();
 }
 
+function verEnter(event, control)
+{
+	var k = event.keyCode;
+	if (k==13)
+		leeCliP(control);
+}
+
 function leeCliP(campo)
 {
 	LeeCliP(campo.value.trim(), escribeCli)
